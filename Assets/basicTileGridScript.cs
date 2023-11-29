@@ -11,7 +11,7 @@ public class basicTileGridScript : MonoBehaviour
 
     public Transform startTransform;
 
-    Tile[,] tiles;
+    public Tile[,] tiles;
 
     // Start is called before the first frame update
     void Start()
