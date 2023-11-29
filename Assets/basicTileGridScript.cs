@@ -16,15 +16,25 @@ public class basicTileGridScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        float startW = (width*10f*scale)/2;
-        float startH = (height*10f*scale)/2;
+        float tileSize = 10f * scale;
+
+        float startW = this.transform.position.x - (width*10f*scale)/2;
+        float startH = this.transform.position.z - (height*10f*scale)/2;
         tiles = new Tile[width,height];
+
+        float w = startW + tileSize/2;
+        float h = startH + tileSize / 2;
+
         //TODO -- set locations based on i,j values so that tiles are centered at startTransform
         for(int i = 0; i < width; i++)
         {
-            for(int j = 0; j < height; j++)
+            w += tileSize;
+            h = startH + tileSize / 2;
+            for (int j = 0; j < height; j++)
             {
-                tiles[i,j] = new Tile(scale); 
+                tiles[i,j] = new Tile(scale);
+                tiles[i, j].setLocation(new Vector3(w, this.transform.position.y, h));
+                h += tileSize;
             }
             //startW = (width*10f*scale)/2;
         }
