@@ -25,7 +25,7 @@ public class basicTileGridScript : MonoBehaviour
         float w = startW + tileSize/2;
         float h = startH + tileSize / 2;
 
-        //TODO -- set locations based on i,j values so that tiles are centered at startTransform
+
         for(int i = 0; i < width; i++)
         {
             w += tileSize;
@@ -44,7 +44,54 @@ public class basicTileGridScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //FOR TESTING PURPOSES
+        /*
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            showPlayerMoves(2, 3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            showPlayerMoves(1,1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            showPlayerMoves(3,4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            showPlayerMoves(0,0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            turnOffAllLights();
+        }
+
+        */
+    }
+
+    void turnOffAllLights()
+    {
+        foreach (Tile t in tiles)
+        {
+            t.changeLight(false);
+        }
+    }
+
+    void showPlayerMoves(int row, int col)
+    {
+        for(int i = row-1; i <= row+1; i++)
+        {
+            if (!(i >= 0) || !(i < width))
+                continue;
+            for (int j = col - 1; j <= col + 1; j++)
+            {
+                if (!(j >= 0) || !(j < height))
+                    continue;
+                tiles[i, j].changeLight(true);
+            }
+        }
     }
 
     public class Tile
