@@ -133,6 +133,9 @@ public class gameLogic : MonoBehaviour
         currentPlayerLoc = new int[] {0,0};
         currentEnemyLoc = new int[] {4,3};
 
+        // playerCharacters.Add()
+        // enemyCharacters.Add()
+
     }
 
     // Chooses a random enemy to base closest character...etc
@@ -248,14 +251,14 @@ int CalculateTurnsToDefeat(int[] playerLoc){
         System.Random r  = new System.Random();
 
         if(attackByPlayer){
-            foreach (var character in playerCharacters.Values){
-                if (character.x == attackerLoc[0] && character.y == attackerLoc[1]){
-                    playerStats = character;
+            foreach (var characterStats in playerCharacters.Values){
+                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1]){
+                    playerStats = characterStats;
                 }
             }   
-            foreach (var character in enemyCharacters.Values){
-                if (character.x == targetLoc[0] && character.y == targetLoc[1]){
-                    enemyStats = character;
+            foreach (var characterStats in enemyCharacters.Values){
+                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1]){
+                    enemyStats = characterStats;
                 }
             }   
             
@@ -270,15 +273,21 @@ int CalculateTurnsToDefeat(int[] playerLoc){
                 }
             }
 
+            if (enemyStats.hp <= 0) {
+            // Enemy is defeated, remove them from dictionary
+                enemyCharacters.Remove(currentEnemy);
+                grid[targetLoc[0],targetLoc[1]] = 0;
+             }
+
         } else{
-            foreach (var character in playerCharacters.Values){
-                if (character.x == targetLoc[0] && character.y == targetLoc[1]){
-                    playerStats = character;
+            foreach (var characterStats in playerCharacters.Values){
+                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1]){
+                    playerStats = characterStats;
                 }
             }   
-            foreach (var character in enemyCharacters.Values){
-                if (character.x == attackerLoc[0] && character.y == attackerLoc[1]){
-                    enemyStats = character;
+            foreach (var characterStats in enemyCharacters.Values){
+                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1]){
+                    enemyStats = characterStats;
                 }
             }   
 
@@ -291,6 +300,11 @@ int CalculateTurnsToDefeat(int[] playerLoc){
                 else{
                     playerStats.hp -= enemyStats.dmg;
                 }
+            }
+
+            if(playerStats.hp <= 0){
+                playerCharacters.Remove(currentPlayer);
+                grid[targetLoc[0],targetLoc[1]] = 0;
             }
         }
 
