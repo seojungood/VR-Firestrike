@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class basicTileGridScript : MonoBehaviour
 {
@@ -13,9 +14,15 @@ public class basicTileGridScript : MonoBehaviour
 
     public Tile[,] tiles;
 
+    int[,] testingData;
+    int testingx = 0;
+    int testingy = 0;
+
     // Start is called before the first frame update
     void Start()
     {
+        testingData =  new int[5, 5];
+        
         float tileSize = 10f * scale;
 
         float startW = this.transform.position.x - (width*10f*scale)/2;
@@ -69,6 +76,57 @@ public class basicTileGridScript : MonoBehaviour
         }
 
         */
+
+        //more testing
+
+        /*
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            testingData[0, 0] = 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            testingData[testingx, testingy] = 0;
+            if (testingx >= 4)
+            {
+                testingx = 0;
+                testingy += 1;
+            }
+            else
+            {
+                testingx += 1;
+            }
+            testingData[testingx, testingy] = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            testingData[testingx, testingy] = 0;
+            if (testingx >= 4)
+            {
+                testingx = 0;
+                testingy += 1;
+            }
+            else
+            {
+                testingx += 1;
+            }
+            testingData[testingx, testingy] = 2;
+        }
+        getData(testingData);
+        */
+    }
+
+    void getData(int[,] boardData)
+    {
+        turnOffAllLights();
+        for(int i = 0; i < boardData.GetLength(0); i++)
+        {
+            for(int j = 0; j < boardData.GetLength(1); j++)
+            {
+                showMoves(i, j, boardData[i, j]);
+            }
+        }
     }
 
     void turnOffAllLights()
@@ -76,6 +134,25 @@ public class basicTileGridScript : MonoBehaviour
         foreach (Tile t in tiles)
         {
             t.changeLight(false);
+        }
+    }
+
+    void showMoves(int row, int col, int type)
+    {
+        if (type == 0)
+            return;
+        for (int i = row - 1; i <= row + 1; i++)
+        {
+            if (!(i >= 0) || !(i < width))
+                continue;
+            for (int j = col - 1; j <= col + 1; j++)
+            {
+                if (!(j >= 0) || !(j < height))
+                    continue;
+                //if type == 1, player space, otherwise enemy space
+                tiles[i, j].playerLightColor(type == 1);
+                tiles[i, j].changeLight(true);
+            }
         }
     }
 
@@ -118,6 +195,21 @@ public class basicTileGridScript : MonoBehaviour
             floor.transform.position = newLoc;
             light.transform.position = newLoc + new Vector3(0,1,0);
         }
+
+        //1 is player character, and 2 is enemy charater
+        public void playerLightColor(bool isPlayer)
+        {
+            if(isPlayer)
+            {
+                light.color = Color.green;
+            }
+            else
+            {
+                light.color = Color.red;
+            }
+
+        }
+
         public void changeLight(bool on)
         {
             if(on)
