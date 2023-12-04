@@ -784,8 +784,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd54f72742f003840bec867eb5619ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screen: {fileID: 0}
-  board: {fileID: 0}
+  screen: {fileID: 1729327691}
+  board: {fileID: 1059439322}
   myCam: {fileID: 343283275}
 --- !u!1 &153151019
 GameObject:
