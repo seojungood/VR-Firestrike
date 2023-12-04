@@ -3327,7 +3327,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819a9b90aeda99a49a30a2dec65112a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationScript: {fileID: 1886068860}
+  animationScript: {fileID: 982011922}
+--- !u!114 &982011922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982011918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcd3f476d18bec644b7f0f7a762e351c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2243431}
+  DwarfMaterMovePos: -1
 --- !u!1001 &1002007678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6373,19 +6387,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationScript: {fileID: 1632394596}
---- !u!114 &1632394599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1632394595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 819a9b90aeda99a49a30a2dec65112a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animationScript: {fileID: 0}
 --- !u!1 &1640958040 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4201891031881188875, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}

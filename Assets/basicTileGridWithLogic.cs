@@ -47,6 +47,7 @@ public class basicTileGridWithLogic : MonoBehaviour
     //w a s d
     char direction = ' ';
 
+    float enemyWaitTimer = 0.0f;
 
     bool isAttack = false;
 
@@ -132,7 +133,6 @@ public class basicTileGridWithLogic : MonoBehaviour
     void setCharacterLoc(Character g, Tile t)
     {
         g.movement.Walk(new Vector3(t.getX(), g.o.transform.position.y, t.getZ()));
-        // g.transform.position = new Vector3(t.getX(), g.transform.position.y, t.getZ());
     }
 
 
@@ -144,7 +144,7 @@ public class basicTileGridWithLogic : MonoBehaviour
         {
             playerStuff();
         }
-        else
+        else if (enemyWaitTimer < 0.0f)
         {
             Character e = getEnemy();
             if (e != null)
@@ -164,6 +164,8 @@ public class basicTileGridWithLogic : MonoBehaviour
                     playerTurn = true;
             }
         }
+
+        enemyWaitTimer -= Time.deltaTime;
     }
 
     public void moveEnemyToPlayer(Character e, Character p)
@@ -198,7 +200,12 @@ public class basicTileGridWithLogic : MonoBehaviour
             e.y = y;
             //Debug.Log("move to " + x + " " + y);
         }
-        //Debug.Log("attackkkkkkk");
+        else
+        {
+            Debug.Log("attackkkkkkk");
+            e.movement.Attack();
+            e.movement.setAnimationValue(1);
+        }
 
     }
 
@@ -208,6 +215,7 @@ public class basicTileGridWithLogic : MonoBehaviour
         if (p1.x == x && p1.y == y && p1.hp > 0)
         {
             Attack(x, y);
+
             return true;
         }
         else if (p2.x == x && p2.y == y && p2.hp > 0)
@@ -351,6 +359,7 @@ public class basicTileGridWithLogic : MonoBehaviour
             direction = ' ';
 
             playerTurn = false;
+            enemyWaitTimer = 1.0f;
 
             if (e1.hp <= 0 && e2.hp <= 0)
             {
@@ -379,6 +388,8 @@ public class basicTileGridWithLogic : MonoBehaviour
         }
         else
         {
+            o.movement.setAnimationValue(1);
+            o.movement.Attack();
             Attack(x, y);
         }
     }
@@ -480,7 +491,7 @@ public class basicTileGridWithLogic : MonoBehaviour
             p1.hp = p1.hp - baseAttack;
             if (p1.hp <= 0)
             {
-                player1.SetActive(false);
+                p1.movement.setAnimationValue(-2);
             }
         }
         else if (p2.x == x && p2.y == y)
@@ -488,7 +499,7 @@ public class basicTileGridWithLogic : MonoBehaviour
             p2.hp = p2.hp - baseAttack;
             if (p2.hp <= 0)
             {
-                player2.SetActive(false);
+                p2.movement.setAnimationValue(-2);
             }
         }
         else if (e1.x == x && e1.y == y)
@@ -496,7 +507,7 @@ public class basicTileGridWithLogic : MonoBehaviour
             e1.hp = e1.hp - baseAttack;
             if (e1.hp <= 0)
             {
-                enemy1.SetActive(false);
+                e1.movement.setAnimationValue(-2);
             }
         }
         else if (e2.x == x && e2.y == y)
@@ -504,7 +515,7 @@ public class basicTileGridWithLogic : MonoBehaviour
             e2.hp = e2.hp - baseAttack;
             if (e2.hp <= 0)
             {
-                enemy2.SetActive(false);
+                e2.movement.setAnimationValue(-2);
             }
         }
     }
