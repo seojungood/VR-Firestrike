@@ -55,6 +55,8 @@ public class gameLogic : MonoBehaviour
     {
         // Initialize Grid with characters
         grid = new int[tileGrid.width, tileGrid.height];
+        playerCharacters = new Dictionary<Transform, CharacterStats>();
+        enemyCharacters = new Dictionary<Transform, CharacterStats>();
         InitializeGrid();
 
         // Initalize Tile Board
@@ -71,7 +73,7 @@ public class gameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string movement = "";
+        Debug.Log("player turn" + playerturn);
 
         if (turnOver)
         {
@@ -83,7 +85,6 @@ public class gameLogic : MonoBehaviour
                 // Move up
                 if (Input.GetKeyDown(KeyCode.UpArrow) && currentPlayerLoc[1] < grid.GetLength(0) - 1)
                 {
-                    movement = "up";
                     // Tell the board who moved where
                     if (currentPlayerLoc[0] == currentEnemyLoc[0] && currentPlayerLoc[1] + 1 == currentEnemyLoc[1])
                     {
@@ -91,52 +92,56 @@ public class gameLogic : MonoBehaviour
                     }
                     else
                     {
+                        int[] prevLoc = currentPlayerLoc;
                         currentPlayerLoc[1]++;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Up");
                     }
                 } // Move down
                 else if (Input.GetKeyDown(KeyCode.DownArrow) && currentPlayerLoc[1] > 0)
                 {
-                    movement = "down";
                     if (currentPlayerLoc[0] == currentEnemyLoc[0] && currentPlayerLoc[1] - 1 == currentEnemyLoc[1])
                     {
                         Attack(currentPlayerLoc, currentEnemyLoc, true);
                     }
                     else
                     {
+                        int[] prevLoc = currentPlayerLoc;
                         currentPlayerLoc[1]--;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Down");
                     }
                 } // Move left
                 else if (Input.GetKeyDown(KeyCode.LeftArrow) && currentPlayerLoc[0] > 0)
                 {
-                    movement = "left";
                     if (currentPlayerLoc[0] - 1 == currentEnemyLoc[0] && currentPlayerLoc[1] == currentEnemyLoc[1])
                     {
                         Attack(currentPlayerLoc, currentEnemyLoc, true);
                     }
                     else
                     {
+                        int[] prevLoc = currentPlayerLoc;
                         currentPlayerLoc[0]--;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Left");
                     }
                 } // Move right
                 else if (Input.GetKeyDown(KeyCode.RightArrow) && currentPlayerLoc[0] < grid.GetLength(1) - 1)
                 {
-                    movement = "right";
                     if (currentPlayerLoc[0] + 1 == currentEnemyLoc[0] && currentPlayerLoc[1] == currentEnemyLoc[1])
                     {
                         Attack(currentPlayerLoc, currentEnemyLoc, true);
                     }
                     else
                     {
+                        int[] prevLoc = currentPlayerLoc;
                         currentPlayerLoc[0]++;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Right");
                     }
                 }
 
                 // Send grid
-                UpdateBoard(movement, true);
 
                 turnOver = true;
             }
@@ -169,32 +174,23 @@ public class gameLogic : MonoBehaviour
         currentPlayerLoc = new int[] { 0, 0 };
         currentEnemyLoc = new int[] { 4, 3 };
 
-        // playerCharacters.Add()
-        // enemyCharacters.Add()
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            playerCharacters.Add(player.GetComponent<Transform>(), CharacterStats.GetDefault());
+        }
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            enemyCharacters.Add(enemy.GetComponent<Transform>(), CharacterStats.GetDefault());
+        }
 
     }
 
     void InitializeBoard()
     {
-        // Initialize grid with 0 (empty) values
-        for (int i = 0; i < tileGrid.width; i++)
-        {
-            for (int j = 0; j < tileGrid.height; j++)
-            {
-                tileGrid.tiles[i, j].changeLight(false);
-            }
-        }
-
-        // Place players and enemies in specific positions
-        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].changeLight(true);
-        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].playerLightColor(true);
-
-        List<CharacterStats> enemyVals = new List<CharacterStats>(enemyCharacters.Values);
-        foreach (CharacterStats enemy in enemyVals)
-        {
-            tileGrid.tiles[enemy.x, enemy.y].changeLight(true);
-            tileGrid.tiles[enemy.x, enemy.y].playerLightColor(false);
-        }
+        tileGrid.getData(grid);
     }
 
     // Chooses a random enemy to base closest character...etc
@@ -232,22 +228,30 @@ public class gameLogic : MonoBehaviour
             if (targetLoc[0] < currentEnemyLoc[0])
             {
                 // move left
+                int[] prevLoc = currentEnemyLoc;
                 currentEnemyLoc[0]--;
+                UpdateBoard(prevLoc, false);
             }
             else if (targetLoc[0] > currentEnemyLoc[0])
             {
                 // move right
+                int[] prevLoc = currentEnemyLoc;
                 currentEnemyLoc[0]++;
+                UpdateBoard(prevLoc, false);
             }
             else if (targetLoc[1] < currentEnemyLoc[1])
             {
                 // move up
+                int[] prevLoc = currentEnemyLoc;
                 currentEnemyLoc[1]--;
+                UpdateBoard(prevLoc, false);
             }
             else
             {
                 // move down
+                int[] prevLoc = currentEnemyLoc;
                 currentEnemyLoc[1]++;
+                UpdateBoard(prevLoc, false);
             }
 
             // Check if the player is adjacent to the target and attack if true
@@ -414,15 +418,13 @@ public class gameLogic : MonoBehaviour
 
 
     // method to send everything to grid
-    void UpdateBoard(string movement, bool isPlayer)
+    void UpdateBoard(int[] prevLoc, bool isPlayer)
     {
-        Debug.Log("Captured Movement: " + movement);
 
-        // set player light
-        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].playerLightColor(true);
-
-        // set enemy light
-        tileGrid.tiles[currentEnemyLoc[0], currentEnemyLoc[1]].changeLight(false);
+        // set new board light
+        tileGrid.tiles[prevLoc[0], prevLoc[1]].changeLight(false);
+        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].changeLight(true);
+        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].playerLightColor(isPlayer);
     }
 
 }

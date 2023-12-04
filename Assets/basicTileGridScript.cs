@@ -117,7 +117,7 @@ public class basicTileGridScript : MonoBehaviour
         */
     }
 
-    void getData(int[,] boardData)
+    public void getData(int[,] boardData)
     {
         turnOffAllLights();
         for (int i = 0; i < boardData.GetLength(0); i++)
