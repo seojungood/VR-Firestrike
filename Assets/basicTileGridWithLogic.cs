@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class basicTileGridWithLogic : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class basicTileGridWithLogic : MonoBehaviour
 
     public int baseAttack;
 
+    public TextMeshProUGUI scoreboard;
+
     int x = 0;
     int y = 0;
 
@@ -59,6 +62,9 @@ public class basicTileGridWithLogic : MonoBehaviour
 
         e1 = new Character(baseHealth, enemy1);
         e2 = new Character(baseHealth, enemy2);
+
+        scoreboard.text = "Game In Progress...";
+        scoreboard.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
         gameData = new int[width, height];
 
@@ -149,7 +155,10 @@ public class basicTileGridWithLogic : MonoBehaviour
                 moveEnemyToPlayer(e, p);
 
                 if (p1.hp <= 0 && p2.hp <= 0)
-                    Debug.Log("YOU LOST");
+                {
+                    scoreboard.text = "You Lost!";
+                    scoreboard.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                }
                 else
                     playerTurn = true;
             }
@@ -224,7 +233,10 @@ public class basicTileGridWithLogic : MonoBehaviour
         else if (p2.hp > 0)
             return p2;
         else
-            Debug.Log("you lost.");
+        {
+            scoreboard.text = "You Lost!";
+            scoreboard.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        }
         return null;
 
     }
@@ -244,7 +256,8 @@ public class basicTileGridWithLogic : MonoBehaviour
             return e1;
         if (e2.hp > 0)
             return e2;
-        Debug.Log("you won");
+        scoreboard.text = "You Won!";
+        scoreboard.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
         return null;
 
     }
@@ -339,7 +352,10 @@ public class basicTileGridWithLogic : MonoBehaviour
             playerTurn = false;
 
             if (e1.hp <= 0 && e2.hp <= 0)
-                Debug.Log("YOU WON");
+            {
+                scoreboard.text = "You Won!";
+                scoreboard.color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+            }
 
         }
     }
