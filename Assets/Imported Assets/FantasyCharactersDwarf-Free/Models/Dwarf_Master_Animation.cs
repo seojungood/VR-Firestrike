@@ -20,7 +20,7 @@ public class Dwarf_Master_Animation : AnimationController
 
     }
 
-    public void SetAnimationValue(float val)
+    public override void SetAnimationValue(float val)
     {
         DwarfMaterMovePos = val;
     }

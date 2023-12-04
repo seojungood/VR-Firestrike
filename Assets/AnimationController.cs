@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class AnimationController : MonoBehaviour
 {
+    public AnimationController()
+    {
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +20,7 @@ public class AnimationController : MonoBehaviour
 
     }
 
-    public void setAnimationValue(float val)
+    public virtual void SetAnimationValue(float val)
     {
         Debug.Log("Error finding override method.");
     }

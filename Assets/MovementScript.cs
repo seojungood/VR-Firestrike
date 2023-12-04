@@ -28,7 +28,7 @@ public class MovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        animationScript.setAnimationValue(currentAnimationValue);
+        animationScript.SetAnimationValue(currentAnimationValue);
 
         if (currentAnimationValue >= targetAnimationValue + 0.1 || currentAnimationValue <= targetAnimationValue - 0.1)
         {
