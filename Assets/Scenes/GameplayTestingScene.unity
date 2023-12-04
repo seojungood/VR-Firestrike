@@ -1410,6 +1410,7 @@ GameObject:
   - component: {fileID: 409050847}
   - component: {fileID: 409050845}
   - component: {fileID: 409050844}
+  - component: {fileID: 409050849}
   m_Layer: 3
   m_Name: Camera_Holo_Texture
   m_TagString: Untagged
@@ -1520,6 +1521,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!61 &409050849
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409050843}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.02560544, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9487891, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &430144442 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1040009498976570613, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
@@ -1570,6 +1597,25 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &609121566 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 896569166721735399, guid: fa4f7cfa07dbd7f42ba4bf9ebb5393ec, type: 3}
+  m_PrefabInstance: {fileID: 1685731963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &609121567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609121566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96fda6f1a6ca418429fae6129ce03f25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  HorsemanMovePos: -1
 --- !u!1 &610174394
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,7 +1626,6 @@ GameObject:
   m_Component:
   - component: {fileID: 610174398}
   - component: {fileID: 610174397}
-  - component: {fileID: 610174396}
   - component: {fileID: 610174395}
   m_Layer: 1
   m_Name: PlayBoard
@@ -1622,14 +1667,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &610174396
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610174394}
-  m_Enabled: 1
 --- !u!20 &610174397
 Camera:
   m_ObjectHideFlags: 0
@@ -1654,7 +1691,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 200
   field of view: 60
   orthographic: 1
   orthographic size: 50
@@ -3963,17 +4000,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2788076960593923311, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
   m_PrefabInstance: {fileID: 1059439321}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1059439323 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5822114293859041336, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
-  m_PrefabInstance: {fileID: 1059439321}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1059439322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8ff782b76334f4eb3a4c11f7117611, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1059439324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3986,7 +4012,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1a8927044d54b599e0c90085df9348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridScript: {fileID: 1059439323}
+  currentEnemy: {fileID: 0}
+  currentPlayer: {fileID: 0}
+  currentEnemyLoc: 
+  currentPlayerLoc: 
 --- !u!114 &1059439325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3999,7 +4028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe2b0af11adb4d309b7d40fe1bd71e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridScript: {fileID: 1059439323}
 --- !u!1 &1071193857
 GameObject:
   m_ObjectHideFlags: 0
@@ -6123,6 +6151,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Horseman
       objectReference: {fileID: 0}
+    - target: {fileID: 896569166731225383, guid: fa4f7cfa07dbd7f42ba4bf9ebb5393ec, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 2846aa404413f564a830a84703840584, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa4f7cfa07dbd7f42ba4bf9ebb5393ec, type: 3}
 --- !u!1001 &1687168306
@@ -7038,17 +7070,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2788076960593923311, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
   m_PrefabInstance: {fileID: 1971611293}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1971611321 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5822114293859041336, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
-  m_PrefabInstance: {fileID: 1971611293}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1971611320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8ff782b76334f4eb3a4c11f7117611, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1971611322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7121,7 +7142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe2b0af11adb4d309b7d40fe1bd71e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridScript: {fileID: 1971611321}
 --- !u!114 &1971611326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7134,7 +7154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1a8927044d54b599e0c90085df9348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridScript: {fileID: 1971611321}
+  currentEnemy: {fileID: 0}
+  currentPlayer: {fileID: 0}
+  currentEnemyLoc: 
+  currentPlayerLoc: 
 --- !u!114 &2018627590
 MonoBehaviour:
   m_ObjectHideFlags: 0
