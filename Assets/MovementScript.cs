@@ -44,7 +44,9 @@ public class MovementScript : MonoBehaviour
             float dis = Vector3.Distance(transform.position, walkingDest); // Calculating Distance
             if (targetAnimationValue == 1 && dis > 0.5)
             {
-                transform.position = transform.position + new Vector3(0.5f, 0.0f, 0.5f);
+                float xDiff = Mathf.Clamp(walkingDest.x - transform.position.x, -4, 4);
+                float zDiff = Mathf.Clamp(walkingDest.z - transform.position.z, -4, 4);
+                transform.position = transform.position + new Vector3(xDiff, 0.0f, 0.5f);
             }
         }
     }
