@@ -19,4 +19,9 @@ public class HorsemanAnimation : AnimationController
         animator.SetFloat("HorseInput", HorsemanMovePos);
 
     }
+
+    public void SetAnimationValue(float val)
+    {
+        HorsemanMovePos = val;
+    }
 }

@@ -784,8 +784,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd54f72742f003840bec867eb5619ff3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screen: {fileID: 1729327691}
-  board: {fileID: 1059439322}
+  screen: {fileID: 0}
+  board: {fileID: 0}
   myCam: {fileID: 343283275}
 --- !u!1 &153151019
 GameObject:
@@ -1202,7 +1202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819a9b90aeda99a49a30a2dec65112a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationScript: {fileID: 1632394596}
+  animationScript: {fileID: 337753478}
 --- !u!1 &343283271
 GameObject:
   m_ObjectHideFlags: 0
@@ -2843,11 +2843,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726939515}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &739738522 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100092, guid: fb328105ad57ad247a2b7cdd432b57f5, type: 3}
-  m_PrefabInstance: {fileID: 1223638095}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &751843400 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2222243551861422971, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
@@ -3315,6 +3310,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bdbc34c6abe44717aca1013ebad4f6e, type: 3}
+--- !u!1 &982011918 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1615335249088072, guid: 2bdbc34c6abe44717aca1013ebad4f6e, type: 3}
+  m_PrefabInstance: {fileID: 982011917}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &982011919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982011918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819a9b90aeda99a49a30a2dec65112a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationScript: {fileID: 1886068860}
 --- !u!1001 &1002007678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4243,7 +4256,7 @@ MonoBehaviour:
   height: 5
   startTransform: {fileID: 697615118}
   player1: {fileID: 1886068859}
-  player2: {fileID: 739738522}
+  player2: {fileID: 982011918}
   enemy1: {fileID: 1632394595}
   enemy2: {fileID: 337753477}
   baseHealth: 2
@@ -6360,6 +6373,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationScript: {fileID: 1632394596}
+--- !u!114 &1632394599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632394595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819a9b90aeda99a49a30a2dec65112a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationScript: {fileID: 0}
 --- !u!1 &1640958040 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4201891031881188875, guid: 0d7f1654a28516649b761c4a715e13d8, type: 3}
@@ -6699,6 +6725,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2243431}
   DwarfMaterMovePos: -1
+--- !u!114 &1886068861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886068859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819a9b90aeda99a49a30a2dec65112a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationScript: {fileID: 1886068860}
 --- !u!1 &1915564714
 GameObject:
   m_ObjectHideFlags: 0

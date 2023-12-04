@@ -19,4 +19,9 @@ public class Dwarf_Master_Animation : AnimationController
         animator.SetFloat("DwarfInput", DwarfMaterMovePos);
 
     }
+
+    public void SetAnimationValue(float val)
+    {
+        DwarfMaterMovePos = val;
+    }
 }
