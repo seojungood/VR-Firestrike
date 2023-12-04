@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class gameLogic : MonoBehaviour
 {
-    public struct CharacterStats{
+    public struct CharacterStats
+    {
         public int x;
         public int y;
         public int hp;
@@ -27,6 +28,8 @@ public class gameLogic : MonoBehaviour
         }
     }
 
+    public basicTileGridScript tileGrid;
+
     public Dictionary<Transform, CharacterStats> playerCharacters;
     public Dictionary<Transform, CharacterStats> enemyCharacters;
 
@@ -38,8 +41,8 @@ public class gameLogic : MonoBehaviour
     public int[] currentEnemyLoc;
     public int[] currentPlayerLoc;
 
-    
-    public int[,] grid = new int[5, 5];
+
+    public int[,] grid;
 
     // True when it is player's turn
     bool playerturn;
@@ -48,9 +51,16 @@ public class gameLogic : MonoBehaviour
     bool turnOver = false;
 
     // Start is called before the first frame update
-    void Start(){
+    void Start()
+    {
         // Initialize Grid with characters
+        grid = new int[tileGrid.width, tileGrid.height];
+        playerCharacters = new Dictionary<Transform, CharacterStats>();
+        enemyCharacters = new Dictionary<Transform, CharacterStats>();
         InitializeGrid();
+
+        // Initalize Tile Board
+        InitializeBoard();
 
         // Can start move
         turnOver = true;
@@ -63,44 +73,74 @@ public class gameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(turnOver){
-            if(playerturn){
+        Debug.Log("player turn" + playerturn);
+
+        if (turnOver)
+        {
+            if (playerturn)
+            {
                 // player turn moves 
 
                 // Use Keyboard arrow keys for now
                 // Move up
-                if (Input.GetKeyDown(KeyCode.UpArrow) && currentPlayerLoc[1] < 4) {
-                    if(currentPlayerLoc[0] == currentEnemyLoc[0] && currentPlayerLoc[1] + 1 == currentEnemyLoc[1]){
-                        Attack(currentPlayerLoc, currentEnemyLoc, true);
-                    } else{
-                        currentPlayerLoc[1]++;
-                        Debug.Log("Moved Up");
-                    } 
-                } // Move down
-                else if (Input.GetKeyDown(KeyCode.DownArrow) && currentPlayerLoc[1] > 0) {
-                    if (currentPlayerLoc[0] == currentEnemyLoc[0] && currentPlayerLoc[1] - 1 == currentEnemyLoc[1]){
+                if (Input.GetKeyDown(KeyCode.UpArrow) && currentPlayerLoc[1] < grid.GetLength(0) - 1)
+                {
+                    // Tell the board who moved where
+                    if (currentPlayerLoc[0] == currentEnemyLoc[0] && currentPlayerLoc[1] + 1 == currentEnemyLoc[1])
+                    {
                         Attack(currentPlayerLoc, currentEnemyLoc, true);
                     }
-                    else{
+                    else
+                    {
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
+                        currentPlayerLoc[1]++;
+                        UpdateBoard(prevLoc, true);
+                        Debug.Log("Moved Up");
+                    }
+                } // Move down
+                else if (Input.GetKeyDown(KeyCode.DownArrow) && currentPlayerLoc[1] > 0)
+                {
+                    if (currentPlayerLoc[0] == currentEnemyLoc[0] && currentPlayerLoc[1] - 1 == currentEnemyLoc[1])
+                    {
+                        Attack(currentPlayerLoc, currentEnemyLoc, true);
+                    }
+                    else
+                    {
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[1]--;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Down");
                     }
                 } // Move left
-                else if (Input.GetKeyDown(KeyCode.LeftArrow) && currentPlayerLoc[0] > 0){
-                    if (currentPlayerLoc[0] - 1 == currentEnemyLoc[0] && currentPlayerLoc[1] == currentEnemyLoc[1]){
+                else if (Input.GetKeyDown(KeyCode.LeftArrow) && currentPlayerLoc[0] > 0)
+                {
+                    if (currentPlayerLoc[0] - 1 == currentEnemyLoc[0] && currentPlayerLoc[1] == currentEnemyLoc[1])
+                    {
                         Attack(currentPlayerLoc, currentEnemyLoc, true);
                     }
-                    else{
+                    else
+                    {
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[0]--;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Left");
                     }
                 } // Move right
-                else if (Input.GetKeyDown(KeyCode.RightArrow) && currentPlayerLoc[0] < 4) {
-                    if (currentPlayerLoc[0] + 1 == currentEnemyLoc[0] && currentPlayerLoc[1] == currentEnemyLoc[1]){
+                else if (Input.GetKeyDown(KeyCode.RightArrow) && currentPlayerLoc[0] < grid.GetLength(1) - 1)
+                {
+                    if (currentPlayerLoc[0] + 1 == currentEnemyLoc[0] && currentPlayerLoc[1] == currentEnemyLoc[1])
+                    {
                         Attack(currentPlayerLoc, currentEnemyLoc, true);
                     }
-                    else{
+                    else
+                    {
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[0]++;
+                        UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Right");
                     }
                 }
@@ -108,7 +148,9 @@ public class gameLogic : MonoBehaviour
                 // Send grid
 
                 turnOver = true;
-            }else{
+            }
+            else
+            {
                 turnOver = false;
                 // If player's turn ends and it is AI turn...
                 ChooseRandomEnemy();
@@ -118,10 +160,13 @@ public class gameLogic : MonoBehaviour
     }
 
     // Intialize grid at start
-    void InitializeGrid(){
+    void InitializeGrid()
+    {
         // Initialize grid with 0 (empty) values
-        for (int i = 0; i < 5; i++){
-            for (int j = 0; j < 5; j++){
+        for (int i = 0; i < tileGrid.width; i++)
+        {
+            for (int j = 0; j < tileGrid.height; j++)
+            {
                 grid[i, j] = 0;
             }
         }
@@ -130,62 +175,114 @@ public class gameLogic : MonoBehaviour
         grid[0, 2] = 1; // Player at position (0,0)
         grid[4, 3] = 2; // Enemy at position (4,3)
 
-        currentPlayerLoc = new int[] {0,0};
-        currentEnemyLoc = new int[] {4,3};
+        currentPlayerLoc = new int[] { 0, 0 };
+        currentEnemyLoc = new int[] { 4, 3 };
 
-        // playerCharacters.Add()
-        // enemyCharacters.Add()
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            playerCharacters.Add(player.GetComponent<Transform>(), CharacterStats.GetDefault());
+        }
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            enemyCharacters.Add(enemy.GetComponent<Transform>(), CharacterStats.GetDefault());
+        }
 
     }
 
+    void InitializeBoard()
+    {
+        //prepare board by clearing it
+        tileGrid.turnOffAllLights();
+
+
+        foreach (CharacterStats player in playerCharacters.Values)
+        {
+            tileGrid.tiles[player.x, player.y].changeLight(true);
+            tileGrid.tiles[player.x, player.y].playerLightColor(true);
+        }
+        foreach (CharacterStats enemy in enemyCharacters.Values)
+        {
+
+            tileGrid.tiles[enemy.x, enemy.y].changeLight(true);
+            tileGrid.tiles[enemy.x, enemy.y].playerLightColor(false);
+        }
+    }
+
     // Chooses a random enemy to base closest character...etc
-        // Randomized selection of enemy to lower difficulty
+    // Randomized selection of enemy to lower difficulty
     void ChooseRandomEnemy()
     {
         // Choose a random enemy character as the target for this turn
-        if (enemyCharacters.Count > 0){
-            List<Transform> enemyKeys = new List<Transform>(enemyCharacters.Keys); 
+        if (enemyCharacters.Count > 0)
+        {
+            List<Transform> enemyKeys = new List<Transform>(enemyCharacters.Keys);
             currentEnemy = enemyKeys[UnityEngine.Random.Range(0, enemyKeys.Count)];
         }
     }
 
     // Enemy finds its closest target and moves to them
-    void FindTargetAndMove(){
-       // Null check  
+    void FindTargetAndMove()
+    {
+        // Null check  
         if (playerCharacters.Count == 0)
             return;
 
         // Find the closest location of closest player
         int[] targetLoc = GetClosestPlayer();
-        
+
         // Check if the player is adjacent to the target and attack if true
         if ((Mathf.Abs(targetLoc[0] - currentEnemyLoc[0]) == 1 && targetLoc[1] == currentEnemyLoc[1]) ||
-            (Mathf.Abs(targetLoc[1] - currentEnemyLoc[1]) == 1 && targetLoc[0] == currentEnemyLoc[0])){
+            (Mathf.Abs(targetLoc[1] - currentEnemyLoc[1]) == 1 && targetLoc[0] == currentEnemyLoc[0]))
+        {
 
             Attack(currentEnemyLoc, targetLoc, false);
         } // If player is not adjacent to enemy, make a move 
-        else if (targetLoc[0] != -1 && targetLoc[1] != -1){
+        else if (targetLoc[0] != -1 && targetLoc[1] != -1)
+        {
             // Get the path to the target tile and move
-            if(targetLoc[0] < currentEnemyLoc[0]){
+            if (targetLoc[0] < currentEnemyLoc[0])
+            {
                 // move left
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[0]--;
-            } else if(targetLoc[0] > currentEnemyLoc[0]){
+                UpdateBoard(prevLoc, false);
+            }
+            else if (targetLoc[0] > currentEnemyLoc[0])
+            {
                 // move right
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[0]++;
-            }else if(targetLoc[1] < currentEnemyLoc[1]){
+                UpdateBoard(prevLoc, false);
+            }
+            else if (targetLoc[1] < currentEnemyLoc[1])
+            {
                 // move up
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[1]--;
-            }else{
+                UpdateBoard(prevLoc, false);
+            }
+            else
+            {
                 // move down
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[1]++;
+                UpdateBoard(prevLoc, false);
             }
 
             // Check if the player is adjacent to the target and attack if true
             if ((Mathf.Abs(targetLoc[0] - currentEnemyLoc[0]) == 1 && targetLoc[1] == currentEnemyLoc[1]) ||
-                (Mathf.Abs(targetLoc[1] - currentEnemyLoc[1]) == 1 && targetLoc[0] == currentEnemyLoc[0])){
+                (Mathf.Abs(targetLoc[1] - currentEnemyLoc[1]) == 1 && targetLoc[0] == currentEnemyLoc[0]))
+            {
                 Attack(currentEnemyLoc, targetLoc, false);
             }
-        
+
         }
 
         //!!!! SEND THIS INFO TO VIEW...
@@ -194,124 +291,162 @@ public class gameLogic : MonoBehaviour
         turnOver = true;
     }
 
-// Gets closest player to currentEnemy, returns coordinates with int[], [0] = x, [1] = y
-int[] GetClosestPlayer(){
-    float shortestDistance = Mathf.Infinity;
-    int[] closestPosition = new int[]{-1, -1}; // default null
+    // Gets closest player to currentEnemy, returns coordinates with int[], [0] = x, [1] = y
+    int[] GetClosestPlayer()
+    {
+        float shortestDistance = Mathf.Infinity;
+        int[] closestPosition = new int[] { -1, -1 }; // default null
 
-    for (int x = 0; x < 5; x++){
-        for (int y = 0; y < 5; y++){
-            if (grid[x, y] == 1){ // Check if the current cell has a player
-            
-                float distanceToPlayer = Mathf.Sqrt(Mathf.Pow(x - currentEnemyLoc[0], 2) + Mathf.Pow(y - currentEnemyLoc[1], 2));
-                
-                if (distanceToPlayer < shortestDistance){
-                    shortestDistance = distanceToPlayer;
-                    closestPosition[0] = x;
-                    closestPosition[1] = y;
+        for (int x = 0; x < tileGrid.width; x++)
+        {
+            for (int y = 0; y < tileGrid.height; y++)
+            {
+                if (grid[x, y] == 1)
+                { // Check if the current cell has a player
+
+                    float distanceToPlayer = Mathf.Sqrt(Mathf.Pow(x - currentEnemyLoc[0], 2) + Mathf.Pow(y - currentEnemyLoc[1], 2));
+
+                    if (distanceToPlayer < shortestDistance)
+                    {
+                        shortestDistance = distanceToPlayer;
+                        closestPosition[0] = x;
+                        closestPosition[1] = y;
+                    }
                 }
             }
         }
+        return closestPosition;
     }
-    return closestPosition;
-}
 
-// Calculates the amount of turns it takes to defeat a player character based on hp and dmg
-int CalculateTurnsToDefeat(int[] playerLoc){
-    int totalTurns = 0;
+    // Calculates the amount of turns it takes to defeat a player character based on hp and dmg
+    int CalculateTurnsToDefeat(int[] playerLoc)
+    {
+        int totalTurns = 0;
 
-    // Retrieve playerStates from the grid using location
-    CharacterStats playerStats = default(CharacterStats);
-    foreach (var character in playerCharacters.Values){
-        if (character.x == playerLoc[0] && character.y == playerLoc[1]){
-            playerStats = character;
+        // Retrieve playerStates from the grid using location
+        CharacterStats playerStats = default(CharacterStats);
+        foreach (var character in playerCharacters.Values)
+        {
+            if (character.x == playerLoc[0] && character.y == playerLoc[1])
+            {
+                playerStats = character;
+            }
         }
-    }
 
-    int remainingHP = playerStats.hp;
+        int remainingHP = playerStats.hp;
 
-    // Assuming basic attack until enemy's HP becomes zero
-    while (remainingHP > 0){
-        // Reduce player's remaining HP
-        remainingHP -= enemyCharacters[currentEnemy].dmg;
+        // Assuming basic attack until enemy's HP becomes zero
+        while (remainingHP > 0)
+        {
+            // Reduce player's remaining HP
+            remainingHP -= enemyCharacters[currentEnemy].dmg;
 
-        if (remainingHP > 0){
-            // Player still alive, increment turns
-            totalTurns++;
+            if (remainingHP > 0)
+            {
+                // Player still alive, increment turns
+                totalTurns++;
+            }
         }
+        return totalTurns;
     }
-    return totalTurns;
-}
-    
+
     // Method that attacks
-    void Attack(int[] attackerLoc, int[] targetLoc, bool attackByPlayer){
+    void Attack(int[] attackerLoc, int[] targetLoc, bool attackByPlayer)
+    {
         CharacterStats playerStats = default(CharacterStats);
         CharacterStats enemyStats = default(CharacterStats);
 
-        System.Random r  = new System.Random();
+        System.Random r = new System.Random();
 
-        if(attackByPlayer){
-            foreach (var characterStats in playerCharacters.Values){
-                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1]){
+        if (attackByPlayer)
+        {
+            foreach (var characterStats in playerCharacters.Values)
+            {
+                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1])
+                {
                     playerStats = characterStats;
                 }
-            }   
-            foreach (var characterStats in enemyCharacters.Values){
-                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1]){
+            }
+            foreach (var characterStats in enemyCharacters.Values)
+            {
+                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1])
+                {
                     enemyStats = characterStats;
                 }
-            }   
-            
+            }
+
             // If hit
-            if(r.Next(0, 100) <= playerStats.hitChance){
+            if (r.Next(0, 100) <= playerStats.hitChance)
+            {
                 // if Crit
-                if(r.Next(0, 100) <= playerStats.critChance){
+                if (r.Next(0, 100) <= playerStats.critChance)
+                {
                     enemyStats.hp -= playerStats.dmg * 2;
                 } // didn't crit
-                else{
+                else
+                {
                     enemyStats.hp -= playerStats.dmg;
                 }
             }
 
-            if (enemyStats.hp <= 0) {
-            // Enemy is defeated, remove them from dictionary
+            if (enemyStats.hp <= 0)
+            {
+                // Enemy is defeated, remove them from dictionary
                 enemyCharacters.Remove(currentEnemy);
-                grid[targetLoc[0],targetLoc[1]] = 0;
-             }
+                grid[targetLoc[0], targetLoc[1]] = 0;
+            }
 
-        } else{
-            foreach (var characterStats in playerCharacters.Values){
-                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1]){
+        }
+        else
+        {
+            foreach (var characterStats in playerCharacters.Values)
+            {
+                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1])
+                {
                     playerStats = characterStats;
                 }
-            }   
-            foreach (var characterStats in enemyCharacters.Values){
-                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1]){
+            }
+            foreach (var characterStats in enemyCharacters.Values)
+            {
+                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1])
+                {
                     enemyStats = characterStats;
                 }
-            }   
+            }
 
             // If hit
-            if(r.Next(0, 100) <= enemyStats.hitChance){
+            if (r.Next(0, 100) <= enemyStats.hitChance)
+            {
                 // if Crit
-                if(r.Next(0, 100) <= enemyStats.critChance){
+                if (r.Next(0, 100) <= enemyStats.critChance)
+                {
                     playerStats.hp -= enemyStats.dmg * 2;
                 } // didn't crit
-                else{
+                else
+                {
                     playerStats.hp -= enemyStats.dmg;
                 }
             }
 
-            if(playerStats.hp <= 0){
+            if (playerStats.hp <= 0)
+            {
                 playerCharacters.Remove(currentPlayer);
-                grid[targetLoc[0],targetLoc[1]] = 0;
+                grid[targetLoc[0], targetLoc[1]] = 0;
             }
         }
 
-        
+
     }
 
 
     // method to send everything to grid
+    void UpdateBoard(int[] prevLoc, bool isPlayer)
+    {
+
+        // set new board light
+        tileGrid.tiles[prevLoc[0], prevLoc[1]].changeLight(false);
+        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].changeLight(true);
+        tileGrid.tiles[currentPlayerLoc[0], currentPlayerLoc[1]].playerLightColor(isPlayer);
+    }
 
 }
