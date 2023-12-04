@@ -98,8 +98,8 @@ public class basicTileGridWithLogic : MonoBehaviour
 
     void initCharacterLoc()
     {
-        setCharacterLoc(player1, tiles[0, 0]);
-        setCharacterLoc(player2, tiles[0, height - 1]);
+        setCharacterLoc(p1, tiles[0, 0]);
+        setCharacterLoc(p2, tiles[0, height - 1]);
         p1.x = 0;
         p1.y = 0;
 
@@ -109,8 +109,8 @@ public class basicTileGridWithLogic : MonoBehaviour
         gameData[0, 0] = 1;
         gameData[0, height - 1] = 1;
 
-        setCharacterLoc(enemy1, tiles[width - 1, 0]);
-        setCharacterLoc(enemy2, tiles[width - 1, height - 1]);
+        setCharacterLoc(e1, tiles[width - 1, 0]);
+        setCharacterLoc(e2, tiles[width - 1, height - 1]);
 
 
         e1.x = width - 1;
@@ -129,9 +129,10 @@ public class basicTileGridWithLogic : MonoBehaviour
         enemy2.transform.Rotate(0, -90, 0);
     }
 
-    void setCharacterLoc(GameObject g, Tile t)
+    void setCharacterLoc(Character g, Tile t)
     {
-        g.transform.position = new Vector3(t.getX(), g.transform.position.y, t.getZ());
+        g.movement.Walk(new Vector3(t.getX(), g.o.transform.position.y, t.getZ()));
+        // g.transform.position = new Vector3(t.getX(), g.transform.position.y, t.getZ());
     }
 
 
@@ -192,7 +193,7 @@ public class basicTileGridWithLogic : MonoBehaviour
     {
         if (!attackPlayer(x, y))
         {
-            setCharacterLoc(e.o, tiles[x, y]);
+            setCharacterLoc(e, tiles[x, y]);
             e.x = x;
             e.y = y;
             //Debug.Log("move to " + x + " " + y);
@@ -298,12 +299,12 @@ public class basicTileGridWithLogic : MonoBehaviour
             {
                 if (playerCharacter == 1)
                 {
-                    move(player1, x + 1, y);
+                    move(p1, x + 1, y);
 
                 }
                 else
                 {
-                    move(player2, x + 1, y);
+                    move(p2, x + 1, y);
                 }
 
 
@@ -312,36 +313,36 @@ public class basicTileGridWithLogic : MonoBehaviour
             {
                 if (playerCharacter == 1)
                 {
-                    move(player1, x, y + 1);
+                    move(p1, x, y + 1);
 
                 }
                 else
                 {
-                    move(player2, x, y + 1);
+                    move(p2, x, y + 1);
                 }
             }
             else if (direction == 's')
             {
                 if (playerCharacter == 1)
                 {
-                    move(player1, x - 1, y);
+                    move(p1, x - 1, y);
 
                 }
                 else
                 {
-                    move(player2, x - 1, y);
+                    move(p2, x - 1, y);
                 }
             }
             else if (direction == 'd')
             {
                 if (playerCharacter == 1)
                 {
-                    move(player1, x, y - 1);
+                    move(p1, x, y - 1);
 
                 }
                 else
                 {
-                    move(player2, x, y - 1);
+                    move(p2, x, y - 1);
                 }
             }
             turnOffAllLights();
@@ -360,7 +361,7 @@ public class basicTileGridWithLogic : MonoBehaviour
         }
     }
 
-    public void move(GameObject o, int x, int y)
+    public void move(Character o, int x, int y)
     {
         if (!isEnemyHere(x, y))
         {
@@ -570,6 +571,8 @@ public class basicTileGridWithLogic : MonoBehaviour
         public int hp;
         public GameObject o;
 
+        public MovementScript movement;
+
         public Character()
         {
             x = y = 0;
@@ -581,6 +584,8 @@ public class basicTileGridWithLogic : MonoBehaviour
             x = y = 0;
             o = startO;
             hp = bHP;
+
+            movement = startO.GetComponent<MovementScript>();
         }
 
 

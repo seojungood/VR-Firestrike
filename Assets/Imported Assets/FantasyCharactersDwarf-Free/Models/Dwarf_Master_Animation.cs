@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dwarf_Master_Animation : MonoBehaviour
+public class Dwarf_Master_Animation : AnimationController
 {
     public Animator animator;
     public float DwarfMaterMovePos;
     // Start is called before the first frame update
     void Start()
     {
-        animator= this.gameObject.GetComponent<Animator>();
+        animator = this.gameObject.GetComponent<Animator>();
         DwarfMaterMovePos = -1;
     }
 
@@ -17,6 +17,6 @@ public class Dwarf_Master_Animation : MonoBehaviour
     void Update()
     {
         animator.SetFloat("DwarfInput", DwarfMaterMovePos);
-        
+
     }
 }
