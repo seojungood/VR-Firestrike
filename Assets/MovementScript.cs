@@ -47,6 +47,7 @@ public class MovementScript : MonoBehaviour
                 float xDiff = Mathf.Clamp(walkingDest.x - transform.position.x, -4, 4);
                 float zDiff = Mathf.Clamp(walkingDest.z - transform.position.z, -4, 4);
                 transform.position = transform.position + new Vector3(xDiff, 0.0f, 0.5f);
+                transform.rotate = new Vector3.Angle(targetDir, transform.forward);
             }
         }
     }
