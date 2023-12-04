@@ -21,25 +21,25 @@ public class basicTileGridScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        testingData =  new int[5, 5];
-        
+        testingData = new int[5, 5];
+
         float tileSize = 10f * scale;
 
-        float startW = this.transform.position.x - (width*10f*scale)/2;
-        float startH = this.transform.position.z - (height*10f*scale)/2;
-        tiles = new Tile[width,height];
+        float startW = this.transform.position.x - (width * 10f * scale) / 2;
+        float startH = this.transform.position.z - (height * 10f * scale) / 2;
+        tiles = new Tile[width, height];
 
-        float w = startW + tileSize/2;
+        float w = startW + tileSize / 2;
         float h = startH + tileSize / 2;
 
 
-        for(int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++)
         {
             w += tileSize;
             h = startH + tileSize / 2;
             for (int j = 0; j < height; j++)
             {
-                tiles[i,j] = new Tile(scale);
+                tiles[i, j] = new Tile(scale);
                 tiles[i, j].setLocation(new Vector3(w, this.transform.position.y, h));
                 h += tileSize;
             }
@@ -120,9 +120,9 @@ public class basicTileGridScript : MonoBehaviour
     void getData(int[,] boardData)
     {
         turnOffAllLights();
-        for(int i = 0; i < boardData.GetLength(0); i++)
+        for (int i = 0; i < boardData.GetLength(0); i++)
         {
-            for(int j = 0; j < boardData.GetLength(1); j++)
+            for (int j = 0; j < boardData.GetLength(1); j++)
             {
                 showMoves(i, j, boardData[i, j]);
             }
@@ -158,7 +158,7 @@ public class basicTileGridScript : MonoBehaviour
 
     void showPlayerMoves(int row, int col)
     {
-        for(int i = row-1; i <= row+1; i++)
+        for (int i = row - 1; i <= row + 1; i++)
         {
             if (!(i >= 0) || !(i < width))
                 continue;
@@ -186,20 +186,20 @@ public class basicTileGridScript : MonoBehaviour
             light.color = Color.red;
             this.scale = scale;
             //set up scale for floor piece
-            floor.transform.localScale = new Vector3(scale*10f, scale*0.1f, scale*10f);
+            floor.transform.localScale = new Vector3(scale * 10f, scale * 0.1f, scale * 10f);
 
         }
-        
+
         public void setLocation(Vector3 newLoc)
         {
             floor.transform.position = newLoc;
-            light.transform.position = newLoc + new Vector3(0,1,0);
+            light.transform.position = newLoc + new Vector3(0, 1, 0);
         }
 
         //1 is player character, and 2 is enemy charater
         public void playerLightColor(bool isPlayer)
         {
-            if(isPlayer)
+            if (isPlayer)
             {
                 light.color = Color.green;
             }
@@ -212,8 +212,8 @@ public class basicTileGridScript : MonoBehaviour
 
         public void changeLight(bool on)
         {
-            if(on)
-                light.intensity = scale*10;
+            if (on)
+                light.intensity = scale * 10;
             else
                 light.intensity = 0;
         }
