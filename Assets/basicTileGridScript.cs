@@ -129,7 +129,7 @@ public class basicTileGridScript : MonoBehaviour
         }
     }
 
-    void turnOffAllLights()
+    public void turnOffAllLights()
     {
         foreach (Tile t in tiles)
         {

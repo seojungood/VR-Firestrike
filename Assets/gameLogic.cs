@@ -92,7 +92,8 @@ public class gameLogic : MonoBehaviour
                     }
                     else
                     {
-                        int[] prevLoc = currentPlayerLoc;
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[1]++;
                         UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Up");
@@ -106,7 +107,8 @@ public class gameLogic : MonoBehaviour
                     }
                     else
                     {
-                        int[] prevLoc = currentPlayerLoc;
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[1]--;
                         UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Down");
@@ -120,7 +122,8 @@ public class gameLogic : MonoBehaviour
                     }
                     else
                     {
-                        int[] prevLoc = currentPlayerLoc;
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[0]--;
                         UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Left");
@@ -134,7 +137,8 @@ public class gameLogic : MonoBehaviour
                     }
                     else
                     {
-                        int[] prevLoc = currentPlayerLoc;
+                        int[] prevLoc = new int[2];
+                        Array.Copy(currentPlayerLoc, prevLoc, 2);
                         currentPlayerLoc[0]++;
                         UpdateBoard(prevLoc, true);
                         Debug.Log("Moved Right");
@@ -190,7 +194,21 @@ public class gameLogic : MonoBehaviour
 
     void InitializeBoard()
     {
-        tileGrid.getData(grid);
+        //prepare board by clearing it
+        tileGrid.turnOffAllLights();
+
+
+        foreach (CharacterStats player in playerCharacters.Values)
+        {
+            tileGrid.tiles[player.x, player.y].changeLight(true);
+            tileGrid.tiles[player.x, player.y].playerLightColor(true);
+        }
+        foreach (CharacterStats enemy in enemyCharacters.Values)
+        {
+
+            tileGrid.tiles[enemy.x, enemy.y].changeLight(true);
+            tileGrid.tiles[enemy.x, enemy.y].playerLightColor(false);
+        }
     }
 
     // Chooses a random enemy to base closest character...etc
@@ -228,28 +246,32 @@ public class gameLogic : MonoBehaviour
             if (targetLoc[0] < currentEnemyLoc[0])
             {
                 // move left
-                int[] prevLoc = currentEnemyLoc;
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[0]--;
                 UpdateBoard(prevLoc, false);
             }
             else if (targetLoc[0] > currentEnemyLoc[0])
             {
                 // move right
-                int[] prevLoc = currentEnemyLoc;
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[0]++;
                 UpdateBoard(prevLoc, false);
             }
             else if (targetLoc[1] < currentEnemyLoc[1])
             {
                 // move up
-                int[] prevLoc = currentEnemyLoc;
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[1]--;
                 UpdateBoard(prevLoc, false);
             }
             else
             {
                 // move down
-                int[] prevLoc = currentEnemyLoc;
+                int[] prevLoc = new int[2];
+                Array.Copy(currentEnemyLoc, prevLoc, 2);
                 currentEnemyLoc[1]++;
                 UpdateBoard(prevLoc, false);
             }
