@@ -21,7 +21,7 @@ public class CrusaderAnimation : AnimationController
 
     }
 
-    public void SetAnimationValue(float val)
+    public override void SetAnimationValue(float val)
     {
         CrusaderMovePos = val;
     }

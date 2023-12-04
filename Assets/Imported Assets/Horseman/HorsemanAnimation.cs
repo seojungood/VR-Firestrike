@@ -20,7 +20,7 @@ public class HorsemanAnimation : AnimationController
 
     }
 
-    public void SetAnimationValue(float val)
+    public override void SetAnimationValue(float val)
     {
         HorsemanMovePos = val;
     }
