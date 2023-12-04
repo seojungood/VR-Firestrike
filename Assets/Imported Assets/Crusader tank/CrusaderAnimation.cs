@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrusaderAnimation : MonoBehaviour
+public class CrusaderAnimation : AnimationController
 {
-    
+
     public Animator animator;
     public float CrusaderMovePos;
     // Start is called before the first frame update
     void Start()
     {
-        animator= this.gameObject.GetComponent<Animator>();
+        animator = this.gameObject.GetComponent<Animator>();
         CrusaderMovePos = -1;
     }
 
@@ -18,6 +18,11 @@ public class CrusaderAnimation : MonoBehaviour
     void Update()
     {
         animator.SetFloat("CrusaderMove", CrusaderMovePos);
-        
+
+    }
+
+    public void setAnimationValue(float val)
+    {
+        CrusaderMovePos = val;
     }
 }
