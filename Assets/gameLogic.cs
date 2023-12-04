@@ -169,6 +169,9 @@ public class gameLogic : MonoBehaviour
         currentPlayerLoc = new int[] { 0, 0 };
         currentEnemyLoc = new int[] { 4, 3 };
 
+        // playerCharacters.Add()
+        // enemyCharacters.Add()
+
     }
 
     void InitializeBoard()
@@ -331,18 +334,18 @@ public class gameLogic : MonoBehaviour
 
         if (attackByPlayer)
         {
-            foreach (var character in playerCharacters.Values)
+            foreach (var characterStats in playerCharacters.Values)
             {
-                if (character.x == attackerLoc[0] && character.y == attackerLoc[1])
+                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1])
                 {
-                    playerStats = character;
+                    playerStats = characterStats;
                 }
             }
-            foreach (var character in enemyCharacters.Values)
+            foreach (var characterStats in enemyCharacters.Values)
             {
-                if (character.x == targetLoc[0] && character.y == targetLoc[1])
+                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1])
                 {
-                    enemyStats = character;
+                    enemyStats = characterStats;
                 }
             }
 
@@ -360,21 +363,28 @@ public class gameLogic : MonoBehaviour
                 }
             }
 
+            if (enemyStats.hp <= 0)
+            {
+                // Enemy is defeated, remove them from dictionary
+                enemyCharacters.Remove(currentEnemy);
+                grid[targetLoc[0], targetLoc[1]] = 0;
+            }
+
         }
         else
         {
-            foreach (var character in playerCharacters.Values)
+            foreach (var characterStats in playerCharacters.Values)
             {
-                if (character.x == targetLoc[0] && character.y == targetLoc[1])
+                if (characterStats.x == targetLoc[0] && characterStats.y == targetLoc[1])
                 {
-                    playerStats = character;
+                    playerStats = characterStats;
                 }
             }
-            foreach (var character in enemyCharacters.Values)
+            foreach (var characterStats in enemyCharacters.Values)
             {
-                if (character.x == attackerLoc[0] && character.y == attackerLoc[1])
+                if (characterStats.x == attackerLoc[0] && characterStats.y == attackerLoc[1])
                 {
-                    enemyStats = character;
+                    enemyStats = characterStats;
                 }
             }
 
@@ -390,6 +400,12 @@ public class gameLogic : MonoBehaviour
                 {
                     playerStats.hp -= enemyStats.dmg;
                 }
+            }
+
+            if (playerStats.hp <= 0)
+            {
+                playerCharacters.Remove(currentPlayer);
+                grid[targetLoc[0], targetLoc[1]] = 0;
             }
         }
 
